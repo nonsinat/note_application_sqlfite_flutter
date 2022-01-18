@@ -1,10 +1,10 @@
-// ignore_for_file: prefer_const_constructors, avoid_print, prefer_final_fields
-
-import 'dart:html';
+// ignore_for_file: prefer_const_constructors, avoid_print, prefer_final_fields, avoid_web_libraries_in_flutter, unused_local_variable
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:note2_applicatoin_flutter/controllers/task_controller.dart';
+import 'package:note2_applicatoin_flutter/models/task_model.dart';
 import 'package:note2_applicatoin_flutter/ui/theme.dart';
 import 'package:note2_applicatoin_flutter/ui/widgets/input_field.dart';
 import 'package:note2_applicatoin_flutter/ui/widgets/t_button.dart';
@@ -17,6 +17,8 @@ class AddTaskScreen extends StatefulWidget {
 }
 
 class _AddTaskScreenState extends State<AddTaskScreen> {
+  final TaskController _taskController = Get.put(TaskController());
+
   TextEditingController titleController = TextEditingController();
   TextEditingController noteController = TextEditingController();
 
@@ -42,7 +44,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
     'Monthly',
   ];
 
-  int _seletedIndex = 0;
+  int _seletedColor = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -210,7 +212,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
               return InkWell(
                 onTap: () {
                   setState(() {
-                    _seletedIndex = index;
+                    _seletedColor = index;
                   });
                 },
                 child: Padding(
@@ -225,7 +227,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                         : index == 1
                             ? pinkClr
                             : yellowClr,
-                    child: _seletedIndex == index
+                    child: _seletedColor == index
                         ? Icon(
                             Icons.done,
                             color: Colors.white,
@@ -244,6 +246,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
 
   _validateData() {
     if (titleController.text.isNotEmpty && noteController.text.isNotEmpty) {
+      _addTaskToDb();
       Get.back();
     } else if (titleController.text.isEmpty || noteController.text.isEmpty) {
       Get.snackbar(
@@ -255,6 +258,23 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
         colorText: Colors.red,
       );
     }
+  }
+
+  _addTaskToDb() async {
+    int value = await _taskController.addTask(
+      task: TaskModel(
+        note: noteController.text,
+        title: titleController.text,
+        date: DateFormat.yMd().format(_selectedData),
+        startTime: _startTime,
+        endTime: _endTime,
+        remind: _selectedRemind,
+        repeat: _selectedRepeat,
+        color: _seletedColor,
+        isCompleted: 0,
+      ),
+    );
+    print("My id is $value");
   }
 
   _appBar(BuildContext context) {
