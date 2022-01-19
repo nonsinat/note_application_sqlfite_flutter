@@ -29,7 +29,7 @@ class TaskModel {
   Map<String, dynamic> toMap() {
     return {
       'id': id,
-      'title': title,
+      'title': title.toString(),
       'note': note,
       'isCompleted': isCompleted,
       'date': date,
@@ -42,20 +42,20 @@ class TaskModel {
   }
 
   TaskModel.fromJson(Map<String, dynamic> json) {
-    id = json['id']?.toInt();
-    title = json['title'];
+    id = json['id'];
+    title = json['title']?.toString();
     note = json['note'];
-    isCompleted = json['isCompleted']?.toInt();
+    isCompleted = json['isCompleted'];
     date = json['date'];
     startTime = json['startTime'];
     endTime = json['endTime'];
-    color = json['color']?.toInt();
-    remind = json['remind']?.toInt();
+    color = json['color'];
+    remind = json['remind'];
     repeat = json['repeat'];
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data =  Map<String, dynamic>();
+    final Map<String, dynamic> data = Map<String, dynamic>();
     data['id'] = this.id;
     data['title'] = this.title;
     data['date'] = this.date;
