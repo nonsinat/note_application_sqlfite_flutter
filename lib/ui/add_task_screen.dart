@@ -263,15 +263,15 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
   _addTaskToDb() async {
     int value = await _taskController.addTask(
       task: TaskModel(
-        note: noteController.text,
-        title: titleController.text,
+        title: titleController.text.toString(),
+        note: noteController.text.toString(),
+        isCompleted: 0,
         date: DateFormat.yMd().format(_selectedData),
         startTime: _startTime,
         endTime: _endTime,
+        color: _seletedColor,
         remind: _selectedRemind,
         repeat: _selectedRepeat,
-        color: _seletedColor,
-        isCompleted: 0,
       ),
     );
     print("My id is $value");
@@ -313,7 +313,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
 
   _getTimeFromUser({required bool isStartTime}) async {
     var pickedTime = await _showTimePicker();
-    String _formatedTime = pickedTime.format(context);
+    String _formatedTime = pickedTime.format(pickedTime);
     if (pickedTime == null) {
       print("Time Canceld");
     } else if (isStartTime == true) {
